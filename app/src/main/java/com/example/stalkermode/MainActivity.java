@@ -31,20 +31,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         myDb = new DatabaseHelper(this);
         listContacts = (TextView) findViewById(R.id.listContacts);
-        loadContacts = (Button) findViewById(R.id.loadContacts);
-        loadContacts.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                if(ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, "You have already granted this permission", Toast.LENGTH_SHORT).show();
-                    loadContacts();
-                } else{
-                    requestPermissions();
-                }
-            }
-        });
+        if(ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(MainActivity.this, "You have already granted this permission", Toast.LENGTH_SHORT).show();
+            loadContacts();
+        } else{
+            requestPermissions();
+        }
     }
+
+
 
     private void loadContacts(){
         StringBuilder builder = new StringBuilder();
@@ -107,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == CONTACT_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                loadContacts();
             } else {
                 Toast.makeText(this, "Permission Denies", Toast.LENGTH_SHORT).show();
             }
